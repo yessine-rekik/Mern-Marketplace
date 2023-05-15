@@ -21,6 +21,15 @@ const deleteDocument = async (req, res, Model) => {
   }
 };
 
+const updateDocument = async (req, res, Model) => {
+  try {
+    await dbQueries.updateDocument(Model, req.body);
+    return res.sendStatus(200);
+  } catch (err) {
+    handleDatabaseError(err, res);
+  }
+};
+
 const fetchDocuments = async (req, res, Model) => {
   try {
     const conditions = req.body;
@@ -40,4 +49,5 @@ module.exports = {
   createDocument,
   deleteDocument,
   fetchDocuments,
+  updateDocument,
 };

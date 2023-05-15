@@ -32,6 +32,21 @@ const deleteDocument = async (model, id) => {
   }
 };
 
+const updateDocument = async (model, data) => {
+  try {
+    const updatedDocument = await model.findByIdAndUpdate(data._id, data);
+    if (!updatedDocument) {
+      throw new DatabaseError('Document not found', 404);
+    }
+    return updatedDocument;
+  } catch (err) {
+    if (err instanceof DatabaseError) {
+      throw err;
+    }
+    throw new DatabaseError(`Error updating document: ${err.message}`, 500);
+  }
+};
+
 const fetchDocuments = async (model, conditions) => {
   try {
     const documents = await model.find(conditions);
@@ -45,4 +60,5 @@ module.exports = {
   createDocument,
   deleteDocument,
   fetchDocuments,
+  updateDocument,
 };
