@@ -1,0 +1,22 @@
+{
+  "name": "Mern-Marketplace",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start": "concurrently \"cd server && npm run start-dev\" \"cd client && npm start\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yessine99/Mern-Marketplace.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yessine99/Mern-Marketplace/issues"
+  },
+  "homepage": "https://github.com/yessine99/Mern-Marketplace#readme",
+  "dependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
