@@ -5,14 +5,14 @@ import useAuth from './useAuth';
 
 function useAxiosPrivate() {
   const refresh = useRefreshToken();
-  const { token } = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
     // If refresh token is not present in the cookie, reject request
     const requestInterceptor = axios.interceptors.request.use(
       (config) => {
         if (!config.headers.Authorization)
-          config.headers.Authorization = `Bearer ${token}`;
+          config.headers.Authorization = `Bearer ${user.accessToken}`;
         return config;
       },
       (err) => Promise.reject(err)
@@ -25,7 +25,7 @@ function useAxiosPrivate() {
         const prevReq = err?.config;
         if (err?.response?.status === 401 && !prevReq.sent) {
           prevReq.sent = true;
-          const newAccessToken = await refresh();
+          const { accessToken: newAccessToken } = await refresh();
           prevReq.headers.Authorization = `Bearer ${newAccessToken}`;
           return axios(prevReq);
         }
@@ -37,7 +37,7 @@ function useAxiosPrivate() {
       axios.interceptors.request.eject(requestInterceptor);
       axios.interceptors.response.eject(responseInterceptor);
     };
-  }, [token, refresh]);
+  }, [user, refresh]);
 
   return axios;
 }

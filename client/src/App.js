@@ -8,6 +8,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import Protected from './components/Protected';
 import Protect from './components/Protect';
 import Header from './components/Header';
+import Chat from './features/Chat/Index';
 
 function App() {
   const darkTheme = createTheme({
@@ -24,7 +25,7 @@ function App() {
             {/* Protected routes */}
             <Route element={<Protect />}>
               <Route path="/protected" element={<Protected />} />
-              <Route path="/protected2" element={<Protected />} />
+              <Route path="/chat" element={<Chat />} />
             </Route>
 
             <Route path="/" element={<Home />} />

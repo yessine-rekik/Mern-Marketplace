@@ -10,8 +10,9 @@ const verifyJWT = (req, res, next) => {
 
   const token = authHeader.replace('Bearer ', '');
 
-  jwt.verify(token, config.jwt_access_secret, (err) => {
+  jwt.verify(token, config.jwt_access_secret, (err, decoded) => {
     if (err) return res.sendStatus(401);
+    req.user = decoded.id;
     next();
   });
 };

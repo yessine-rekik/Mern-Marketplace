@@ -15,7 +15,7 @@ function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { setToken } = useAuth();
+  const { setUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
@@ -33,8 +33,7 @@ function Register() {
       try {
         const response = await axios.post('/register', credentials);
 
-        const { accessToken } = response.data;
-        setToken(accessToken);
+        setUser(response.data);
 
         alert('Submitted');
         navigate(from, { replace: true });

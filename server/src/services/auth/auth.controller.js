@@ -46,7 +46,11 @@ async function login(req, res) {
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
-      .send({ accessToken });
+      .send({
+        accessToken,
+        _id: user._id,
+        username: user.username,
+      });
   } catch (err) {
     console.log(err);
     res.status(500).send(err);
@@ -79,13 +83,19 @@ async function refreshToken(req, res) {
       // if no user if found then the refresh token must be revoked(deleted from DB)
       if (!user) return res.status(401).send('Invalid Token');
 
+      console.log(user);
       const accessToken = genereateAccessToken(decoded.id);
       res
         .cookie('refresh-token', newRefreshToken, {
           httpOnly: true,
           maxAge: 7 * 24 * 60 * 60 * 1000,
         })
-        .send({ user, accessToken, newRefreshToken });
+        .send({
+          _id: user._id,
+          username: user.username,
+          accessToken,
+          // newRefreshToken
+        });
     });
   } catch (err) {
     console.log(err);
@@ -143,14 +153,18 @@ async function register(req, res) {
       ...user,
       refreshTokens: [refreshToken],
     };
-    await User.create(user);
+    const createdUser = await User.create(user);
 
     res
       .cookie('refresh-token', refreshToken, {
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000,
       })
-      .send({ accessToken });
+      .send({
+        accessToken,
+        _id: createdUser._id,
+        username: createdUser.username,
+      });
   } catch (err) {
     console.log(err);
     res.status(500).send(err);

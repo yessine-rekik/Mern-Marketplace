@@ -28,7 +28,7 @@ function Login() {
   const [fieldsIntertactedWith, setFieldsInteractedWith] = useState({});
   const [showPassword, setShowPassword] = useState(false);
 
-  const { token, setToken } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -41,10 +41,9 @@ function Login() {
     onSubmit: async (values) => {
       try {
         const response = await axios.post('/login', values);
+        setUser(response.data);
 
-        const { accessToken } = response.data;
-        setToken(accessToken);
-
+        console.log(response.data);
         alert('Submitted');
 
         const from = location.state?.from?.pathname || '/';
@@ -79,7 +78,7 @@ function Login() {
       return formik.errors[fieldName];
   };
 
-  return token ? (
+  return user ? (
     <Navigate to="/" replace />
   ) : (
     <form

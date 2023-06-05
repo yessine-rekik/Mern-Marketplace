@@ -6,7 +6,7 @@ import useLogout from '../hooks/useLogout';
 import { useNavigate } from 'react-router-dom';
 
 function Header() {
-  const { token } = useAuth();
+  const { user } = useAuth();
   const logout = useLogout();
   const navigate = useNavigate();
 
@@ -26,7 +26,10 @@ function Header() {
         <Link component={RouterLink} to="/protected" underline="none">
           Protected
         </Link>
-        {!token ? (
+        <Link component={RouterLink} to="/chat" underline="none">
+          Chat
+        </Link>
+        {!user ? (
           <Link component={RouterLink} to="/login" underline="none">
             Login
           </Link>

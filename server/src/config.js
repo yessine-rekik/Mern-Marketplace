@@ -8,4 +8,6 @@ module.exports = {
 
   jwt_access_secret: process.env.JWT_ACCESS_SECRET || 'AA',
   jwt_refresh_secret: process.env.JWT_REFRESH_SECRET || 'BB',
+
+  origin: process.env.ORIGIN || 'http://localhost:3000',
 };

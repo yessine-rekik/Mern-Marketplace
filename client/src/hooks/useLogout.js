@@ -2,10 +2,10 @@ import axios from '../config/axios';
 import useAuth from '../hooks/useAuth';
 
 const useLogout = () => {
-  const { setToken } = useAuth();
+  const { setUser } = useAuth();
 
   const logout = async () => {
-    setToken(null);
+    setUser(null);
     try {
       await axios.post('/logout');
     } catch (err) {

@@ -6,7 +6,7 @@ import useAuth from '../hooks/useAuth';
 function Protect() {
   const [isLoading, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
-  const { token } = useAuth();
+  const { user } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
@@ -20,15 +20,15 @@ function Protect() {
       }
     };
 
-    !token ? verifyRefreshToken() : setIsLoading(false);
+    !user ? verifyRefreshToken() : setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    console.log(`Access token: ${token}`);
+    console.log(user);
   }, [isLoading]);
   return isLoading ? (
     <p>Loading...</p>
-  ) : token ? (
+  ) : user ? (
     <Outlet />
   ) : (
     <Navigate to="/login" state={{ from: location }} replace />

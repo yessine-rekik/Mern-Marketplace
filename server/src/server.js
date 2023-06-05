@@ -26,4 +26,8 @@ app.use((req, res, next) => {
 
 app.use('/api', router);
 
-app.listen(PORT, () => console.log(`Server running on PORT: ${PORT}`));
+const server = app.listen(PORT, () => {
+  console.log(`Server running on PORT: ${PORT}`);
+});
+
+require('./services/chat/index')(server);
