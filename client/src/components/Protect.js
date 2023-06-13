@@ -27,7 +27,8 @@ function Protect() {
     console.log(user);
   }, [isLoading]);
   return isLoading ? (
-    <p>Loading...</p>
+    // <p>Loading...</p>''
+    ''
   ) : user ? (
     <Outlet />
   ) : (

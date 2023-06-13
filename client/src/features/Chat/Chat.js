@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -10,19 +10,69 @@ import {
 import { ArrowBack, ArrowDownward, SendRounded } from '@mui/icons-material';
 import Input from './Input';
 
+const getDate = (date) => {
+  const givenDate = new Date(date);
+  const today = new Date();
+
+  const oneWeekMs = 1000 * 60 * 60 * 24 * 7;
+  const msDiff = Math.abs(today.getTime() - givenDate.getTime());
+  const weeksDiff = Math.floor(msDiff / oneWeekMs);
+  if (weeksDiff > 0) {
+    return givenDate.toLocaleString('fr-FR', {
+      day: 'numeric',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  } else {
+    if (today.getDay() - givenDate.getDay() === 0) return 'Today';
+    else if (today.getDay() - givenDate.getDay() === 1) return 'Yesterday';
+    else {
+      const weekdays = [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ];
+      return weekdays[givenDate.getDay()];
+    }
+  }
+};
+
 function Chat({ chat, handleSendMessage }) {
   const [showFab, setShowFab] = useState(false);
-
+  const [shouldScroll, setShouldScroll] = useState(true);
   const scrollRef = useRef();
-  const bottomScrollRef = useRef();
 
   useEffect(() => {
-    scrollToBottom();
+    if (shouldScroll || chat.messages[chat.messages.length - 1]?.isSender)
+      scrollToBottom();
   }, [chat]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      scrollToBottom();
+    }, 20);
+  }, []);
+
   const scrollToBottom = () => {
-    bottomScrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+    scrollRef.current.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: 'smooth',
+    });
   };
+
+  const sendMessage = useCallback((message, cb) => {
+    handleSendMessage({
+      chat: chat._id,
+      content: message.trim(),
+    });
+    cb();
+  }, []);
 
   const handleScroll = () => {
     const scrollElement = scrollRef.current;
@@ -31,14 +81,11 @@ function Chat({ chat, handleSendMessage }) {
       scrollElement.scrollTop + scrollElement.clientHeight >=
       scrollElement.scrollHeight - 300;
     setShowFab(!isAtBottom);
-  };
 
-  const sendMessage = (message, cb) => {
-    handleSendMessage({
-      chat: chat._id,
-      content: message.trim(),
-    });
-    cb();
+    Math.ceil(scrollElement.scrollTop + scrollElement.clientHeight) ===
+    scrollElement.scrollHeight
+      ? setShouldScroll(true)
+      : setShouldScroll(false);
   };
 
   return (
@@ -58,9 +105,14 @@ function Chat({ chat, handleSendMessage }) {
       {/* Conversation */}
       <div ref={scrollRef} style={section2.wrapper} onScroll={handleScroll}>
         {chat.messages?.map((msg, index) => (
-          <Box key={index} sx={section2.messageBox(msg)}>
-            <span style={section2.messageSpan}>{msg.content}</span>
-          </Box>
+          <React.Fragment key={index}>
+            {/* <Typography variant="body2" color="grey" marginTop="1rem">
+              {getDate(msg.updatedAt)}
+            </Typography> */}
+            <Box key={index} sx={section2.messageBox(msg)}>
+              <span style={section2.messageSpan}>{msg.content}</span>
+            </Box>
+          </React.Fragment>
         ))}
 
         {showFab && (
@@ -75,8 +127,9 @@ function Chat({ chat, handleSendMessage }) {
             </Fab>
           </Box>
         )}
-        <div ref={bottomScrollRef} />
+        {/* <div ref={bottomScrollRef} /> */}
       </div>
+
       {/* Input message */}
       <Input sendMessage={sendMessage} />
     </div>

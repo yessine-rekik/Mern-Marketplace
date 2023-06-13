@@ -1,6 +1,6 @@
 import { Search } from '@mui/icons-material';
-import { TextField, IconButton } from '@mui/material';
-import React from 'react';
+import { TextField, IconButton, MenuItem, Autocomplete } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 
 function SearchChat() {
   return (

@@ -21,7 +21,7 @@ async function getLatestChatsWithLasestMessages(req, res) {
             { $match: { $expr: { $eq: ['$chat', '$$chatId'] } } },
             { $sort: { updatedAt: -1 } },
             // { $limit: messagesAmount || 20 },
-            // { $sort: { updatedAt: 1 } },
+            { $sort: { updatedAt: 1 } },
             {
               $addFields: {
                 isSender: { $eq: ['$sender', uid] },
@@ -36,6 +36,7 @@ async function getLatestChatsWithLasestMessages(req, res) {
             {
               $project: {
                 content: 1,
+                updatedAt: 1,
                 isSender: 1,
               },
             },
@@ -60,7 +61,6 @@ async function getLatestChatsWithLasestMessages(req, res) {
         },
       },
     ]);
-
     res.send(
       chats.map((chat) => {
         const otherUser =

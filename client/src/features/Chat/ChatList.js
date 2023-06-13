@@ -6,14 +6,8 @@ import {
   ListItemIcon,
   ListItemText,
   Avatar,
+  Typography,
 } from '@mui/material';
-
-const getLatestMessage = (messages = []) => {
-  const latestMessage = messages[messages.length - 1];
-  return latestMessage.isSender
-    ? `Vous: ${latestMessage.content}`
-    : latestMessage.content;
-};
 
 function ChatList({ chats, selectedChat, setSelectedChat }) {
   return (
@@ -47,31 +41,38 @@ function ChatList({ chats, selectedChat, setSelectedChat }) {
             <ListItemIcon>
               <Avatar src={chat.img} />
             </ListItemIcon>
-            <ListItemText
-              primary={chat.name}
-              secondary={`${
-                [
-                  '2 weeks',
-                  'Saturday',
-                  '4 weeks',
-                  '1 year',
-                  '8 weeks',
-                  '15h30',
-                ][Math.floor(Math.random() * 5)]
-              } - ${getLatestMessage(chat.messages)}`}
-              primaryTypographyProps={{
-                // variant: 'h6',
-                fontSize: 18,
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
                 overflow: 'hidden',
               }}
-              secondaryTypographyProps={{
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-                overflow: 'hidden',
-              }}
-            ></ListItemText>
+            >
+              <Typography
+                whiteSpace="nowrap"
+                textOverflow="ellipsis"
+                overflow="hidden"
+                variant="h6"
+              >
+                {chat.name}
+              </Typography>
+              <div style={{ display: 'flex' }}>
+                <Typography
+                  color="grey"
+                  variant="body2"
+                  whiteSpace="nowrap"
+                  textOverflow="ellipsis"
+                  overflow="hidden"
+                  marginRight={'0.5rem'}
+                >
+                  {chat.latestMessage}
+                </Typography>
+                <Typography color="grey" variant="body2" whiteSpace="nowrap">
+                  - {chat.date}
+                </Typography>
+              </div>
+            </div>
           </ListItemButton>
         </Box>
       ))}
