@@ -1,7 +1,11 @@
 import React from 'react';
-
+import Ads from '../features/Ads/AdsList';
 function Home() {
-  return <h1>Welcome to the Marketplace !</h1>;
+  return (
+    <>
+      <Ads />
+    </>
+  );
 }
 
 export default Home;

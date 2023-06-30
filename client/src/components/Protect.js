@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import useRefreshToken from '../hooks/useRefreshToken';
 import useAuth from '../hooks/useAuth';
+import Backdrop from '../components/shared/Backdrop';
 
 function Protect() {
   const [isLoading, setIsLoading] = useState(true);
@@ -27,8 +28,7 @@ function Protect() {
     console.log(user);
   }, [isLoading]);
   return isLoading ? (
-    // <p>Loading...</p>''
-    ''
+    <Backdrop />
   ) : user ? (
     <Outlet />
   ) : (

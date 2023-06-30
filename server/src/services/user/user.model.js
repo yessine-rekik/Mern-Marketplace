@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
   },
   refreshTokens: [String],
   accessToken: String,
+  totalAds: {
+    type: Number,
+    default: 0,
+  },
 });
 
 module.exports = mongoose.model('users', UserSchema);
