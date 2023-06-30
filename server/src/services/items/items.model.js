@@ -33,6 +33,11 @@ const ItemSchema = new mongoose.Schema(
   }
 );
 
+ItemSchema.index({
+  title: 'text',
+  description: 'text',
+});
+
 ItemSchema.virtual('category', {
   ref: 'categories',
   localField: 'categoryId',
